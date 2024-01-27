@@ -2,7 +2,7 @@ import os
 import time
 
 
-def delete_old_files(directory, days=15):
+def delete_old_files_and_empty_dirs(directory, days=15):
     current_time = time.time()
 
     for item in os.listdir(directory):
@@ -15,7 +15,11 @@ def delete_old_files(directory, days=15):
                 os.remove(item_path)
                 print(f"Видалено файл: {item_path}")
         elif os.path.isdir(item_path):
-            delete_old_files(item_path, days)
+            delete_old_files_and_empty_dirs(item_path, days)
+
+    if not os.listdir(directory):
+        os.rmdir(directory)
+        print(f"Видалено порожню папку: {directory}")
 
 
-delete_old_files('/home/admin228a/Videos', days=15)
+delete_old_files_and_empty_dirs('/home/admin228a/Videos', days=15)
